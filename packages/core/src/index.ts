@@ -1,18 +1,31 @@
-import { WeatherProvider } from "./providers/WeatherProvider";
-import { OpenWeatherProvider } from "./providers/openweather/OpenWeatherProvider";
-
-type WeatherKitOptions = {
-  apiKey: string;
+//import { WeatherProvider } from "./providers/WeatherProvider";
+import { WeatherProvider } from "./providers/WeatherProvider.ts";
+type Options = {
+  providers: WeatherProvider[];
 };
 
 export class WeatherKit {
-  private provider: WeatherProvider;
+  private providers: WeatherProvider[];
 
-  constructor(options: WeatherKitOptions) {
-    this.provider = new OpenWeatherProvider(options.apiKey);
+  constructor(options: Options) {
+    this.providers = options.providers;
   }
 
   async current(city: string) {
-    return this.provider.current(city);
+    let lastError: any;
+
+    for (const provider of this.providers) {
+      try {
+        const result = await provider.current(city);
+        return {
+          provider: provider.name,
+          ...result
+        };
+      } catch (err) {
+        lastError = err;
+      }
+    }
+
+    throw new Error("All providers failed: " + lastError);
   }
 }

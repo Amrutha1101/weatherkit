@@ -1,9 +1,12 @@
-import { WeatherKit } from "./packages/core/dist/index.js";
+import { WeatherKit } from "./packages/core/src/index.ts";
+import { OpenWeatherProvider } from "./packages/core/src/providers/openweather/OpenWeatherProvider.ts";
+import { WeatherAPIProvider } from "./packages/core/src/providers/weatherapi/WeatherAPIProvider.ts";
 
 const weather = new WeatherKit({
-  apiKey: "3358c6fd1328302013467b17d108bbb5",
+  providers: [
+    new OpenWeatherProvider("OPENWEATHER_KEY"),
+    new WeatherAPIProvider("WEATHERAPI_KEY")
+  ]
 });
 
-const data = await weather.current("London");
-
-console.log(data);
+console.log(await weather.current("Bangalore"));
