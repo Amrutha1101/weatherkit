@@ -1,9 +1,14 @@
+import { WeatherProvider } from "./providers/WeatherProvider";
 import { OpenWeatherProvider } from "./providers/openweather/OpenWeatherProvider";
 
-export class WeatherKit {
-  private provider: OpenWeatherProvider;
+type WeatherKitOptions = {
+  apiKey: string;
+};
 
-  constructor(options: { apiKey: string }) {
+export class WeatherKit {
+  private provider: WeatherProvider;
+
+  constructor(options: WeatherKitOptions) {
     this.provider = new OpenWeatherProvider(options.apiKey);
   }
 

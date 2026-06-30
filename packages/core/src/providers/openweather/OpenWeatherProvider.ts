@@ -1,7 +1,8 @@
 import { OpenWeatherClient } from "./client";
+import { WeatherProvider } from "../WeatherProvider";
 import { mapOpenWeather } from "./mapper";
 
-export class OpenWeatherProvider {
+export class OpenWeatherProvider implements WeatherProvider {
   private client: OpenWeatherClient;
 
   constructor(apiKey: string) {
