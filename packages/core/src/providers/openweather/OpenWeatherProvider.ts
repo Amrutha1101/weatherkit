@@ -22,9 +22,9 @@ export class OpenWeatherProvider implements WeatherProvider {
       feelsLike: data.main.feels_like,
       humidity: data.main.humidity,
       condition: data.weather?.[0]?.main,
-      seaLevel: data.main.sea_level,
-      sunrise: data.sys.sunrise,
-      sunset: data.sys.sunset,
+    //   seaLevel: data.main.sea_level,
+    //   sunrise: data.sys.sunrise,
+    //   sunset: data.sys.sunset,
     };
   }
 }

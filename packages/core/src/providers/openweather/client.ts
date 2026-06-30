@@ -1,4 +1,8 @@
-import { request } from "undici";
+import { request } from 'undici';
+import { WeatherError } from '../../errors/WeatherError';
+import { RateLimitError } from '../../errors/RateLimitError';
+import { CityNotFoundError } from '../../errors/CityNotFoundError';
+import { AuthenticationError } from '../../errors/AuthenticationError';
 
 export class OpenWeatherClient {
   constructor(private apiKey: string) {}
@@ -8,7 +12,23 @@ export class OpenWeatherClient {
       `https://api.openweathermap.org/data/2.5/weather` +
       `?q=${city}&appid=${this.apiKey}&units=metric`;
 
-    const { body } = await request(url);
-    return await body.json();
+    const response = await fetch(url);
+
+    if (response.status === 401) {
+      throw new AuthenticationError();
+    }
+
+    if (response.status === 404) {
+      throw new CityNotFoundError(city);
+    }
+
+    if (response.status === 429) {
+      throw new RateLimitError();
+    }
+
+    if (!response.ok) {
+      throw new WeatherError('Unknown weather API error.');
+    }
+    return await response.json();
   }
 }

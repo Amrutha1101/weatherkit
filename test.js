@@ -3,10 +3,8 @@ import { OpenWeatherProvider } from "./packages/core/src/providers/openweather/O
 import { WeatherAPIProvider } from "./packages/core/src/providers/weatherapi/WeatherAPIProvider.ts";
 
 const weather = new WeatherKit({
-  providers: [
-    new OpenWeatherProvider("OPENWEATHER_KEY"),
-    new WeatherAPIProvider("WEATHERAPI_KEY")
-  ]
+  provider: "openweather",
+  apiKey: "YOUR_KEY"
 });
 
 console.log(await weather.current("Bangalore"));

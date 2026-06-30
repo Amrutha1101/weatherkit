@@ -1,31 +1,22 @@
-//import { WeatherProvider } from "./providers/WeatherProvider";
-import { WeatherProvider } from "./providers/WeatherProvider.ts";
-type Options = {
-  providers: WeatherProvider[];
-};
+import { WeatherKitOptions } from "./types/WeatherKitOptions";
+import { OpenWeatherProvider } from "./providers/openweather/OpenWeatherProvider";
+import {WeatherProvider} from "./providers/WeatherProvider";
 
 export class WeatherKit {
-  private providers: WeatherProvider[];
+  private provider: WeatherProvider;
 
-  constructor(options: Options) {
-    this.providers = options.providers;
+  constructor(options: WeatherKitOptions) {
+    switch (options.provider) {
+      case "openweather":
+        this.provider = new OpenWeatherProvider(options.apiKey);
+        break;
+
+      default:
+        throw new Error("Unsupported provider");
+    }
   }
 
   async current(city: string) {
-    let lastError: any;
-
-    for (const provider of this.providers) {
-      try {
-        const result = await provider.current(city);
-        return {
-          provider: provider.name,
-          ...result
-        };
-      } catch (err) {
-        lastError = err;
-      }
-    }
-
-    throw new Error("All providers failed: " + lastError);
+    return this.provider.current(city);
   }
 }
