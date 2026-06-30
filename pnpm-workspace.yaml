@@ -1,0 +1,6 @@
+packages:
+  - "packages/*"
+  # Look inside the packages folder. Every subfolder is a package.
+  # Every immediate subfolder after packages is included
+allowBuilds:
+  esbuild: set this to true or false
